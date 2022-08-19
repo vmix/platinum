@@ -54,11 +54,11 @@ class WinnerService implements WinnerInterface
         $reservedPrice = ReservedPrice::getReservedPrice();
         $highestUserBids = HighestUserBids::highestUserBids($allBidders);
 
-        if (count($highestUserBids) == 0) {
+        if (count((array) $highestUserBids) == 0) {
             return null;
         }
 
-        if (count($highestUserBids) == 1) {
+        if (count((array) $highestUserBids) == 1) {
             return $reservedPrice;
         } else {
             unset($highestUserBids[$winnerName]);
@@ -71,7 +71,7 @@ class WinnerService implements WinnerInterface
             if ($reservedPrice > $secondBetterPrice) {
                 return $reservedPrice;
             } else {
-                switch (count($highestLoosingBids)) {
+                switch (count((array) $highestLoosingBids)) {
                     case 0:
                         return null;
                     case 1:
