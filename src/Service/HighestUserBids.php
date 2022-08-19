@@ -12,21 +12,27 @@ class HighestUserBids implements HighestUserBidsInterface
     /**
      * @throws \Exception
      */
-    public static function highestUserBids(?array $bidders): array
+    public static function highestUserBids(?array $bidders): ?array
     {
-        if (count((array) $bidders) == 0) {
-            throw new \Exception(MessagesStorage::EXCEPTION_NO_BIDS);
+        try {
+            if (count((array)$bidders) == 0) {
+                throw new \Exception(MessagesStorage::EXCEPTION_NO_BIDS);
+            }
+
+            $highestUserBids = [];
+            foreach ($bidders as $bidder) {
+                if (null === HighestUserBid::findHighestUserBid($bidder)) continue;
+                $highestUserBids[$bidder->getName()] = HighestUserBid::findHighestUserBid($bidder);
+            }
+
+            uasort($highestUserBids, 'self::compare');
+
+            return $highestUserBids;
+        } catch (\Exception $exception){
+            echo $exception->getMessage();
         }
 
-        $highestUserBids = [];
-        foreach ($bidders as $bidder) {
-            if (null === HighestUserBid::findHighestUserBid($bidder)) continue;
-            $highestUserBids[$bidder->getName()] = HighestUserBid::findHighestUserBid($bidder);
-        }
-
-        uasort($highestUserBids, 'self::compare');
-
-        return $highestUserBids;
+        return null;
     }
 
     private static function compare($a, $b): int

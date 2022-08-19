@@ -7,10 +7,9 @@ use Ocelot\Platinum\Service\WinnerAlgorithm;
 
 require_once 'vendor/autoload.php';
 
-$bidderRepository = new BidderRepository();
-$reservePrice = ReservedPrice::getReservedPrice();
-
+$bidders = (new BidderRepository())->allAuctionParticipants();
+//var_dump($bidders);
 $algorithm = new WinnerAlgorithm();
-$algorithm->findWinner($bidderRepository, $reservePrice);
+$algorithm->findWinner($bidders, ReservedPrice::getReservedPrice());
 
 

@@ -16,7 +16,14 @@ class WinnerService implements WinnerInterface
                 case 0:
                     throw new \Exception(MessagesStorage::EXCEPTION_NO_BIDS);
                 case 1:
-                    return array_key_last($highestUserBids);
+                    $key = array_key_last($highestUserBids);
+                    $winnerBid = $highestUserBids[$key];
+
+                    if ($winnerBid >= ReservedPrice::getReservedPrice()) {
+                        return array_key_last($highestUserBids);
+                    } else {
+                        return null;
+                    }
                 default:
                     $twoLuckiestBidders = array_slice($highestUserBids, -2);
                     $potentialWinner = array_pop($highestUserBids);
@@ -44,8 +51,12 @@ class WinnerService implements WinnerInterface
      */
     public static function winnerPrice(array $allBidders, string $winnerName): ?int
     {
-        $highestUserBids = HighestUserBids::highestUserBids($allBidders);
         $reservedPrice = ReservedPrice::getReservedPrice();
+        $highestUserBids = HighestUserBids::highestUserBids($allBidders);
+
+        if (count($highestUserBids) == 0) {
+            return null;
+        }
 
         if (count($highestUserBids) == 1) {
             return $reservedPrice;

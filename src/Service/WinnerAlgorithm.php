@@ -8,16 +8,16 @@ use Ocelot\Platinum\Repository\BidderRepository;
 
 class WinnerAlgorithm implements WinnerAlgorithmInterface
 {
-    public function findWinner(BidderRepository $bidderRepository, int $reservedPrice): ?bool
+    public function findWinner(array $bidders, int $reservedPrice): ?array
     {
-        $bidders = $bidderRepository->allAuctionParticipants();
+//        $bidders = $bidderRepository->allAuctionParticipants();
 
         try {
             $highestUserBids = HighestUserBids::highestUserBids($bidders);
             $winnerName = WinnerService::winnerName($highestUserBids);
 
             if (null === $winnerName) {
-                throw new \Exception(MessagesStorage::EXCEPTION_WINNER_NOT_DEFINED);
+                throw new \Exception(MessagesStorage::EXCEPTION_NONE_WINNERS);
             }
 
             $winnerPrice = WinnerService::winnerPrice($bidders , $winnerName);
@@ -28,7 +28,7 @@ class WinnerAlgorithm implements WinnerAlgorithmInterface
                 } else {
                     echo sprintf(MessagesStorage::WINNER_WITH_RESERVE_PRICE, $winnerName, $reservedPrice);
                 }
-                return true;
+                return [$winnerName, $winnerPrice];
             }
         } catch (\Exception $e) {
             echo $e->getMessage();
