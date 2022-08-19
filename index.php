@@ -4,7 +4,6 @@ use Ocelot\Platinum\Data\MessagesStorage;
 use Ocelot\Platinum\Data\ReservedPrice;
 use Ocelot\Platinum\Repository\BidderRepository;
 use Ocelot\Platinum\Service\HighestUserBids;
-use Ocelot\Platinum\Service\Message;
 use Ocelot\Platinum\Service\WinnerService;
 
 require_once 'vendor/autoload.php';

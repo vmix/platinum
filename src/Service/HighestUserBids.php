@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace Ocelot\Platinum\Service;
 
 use Ocelot\Platinum\Data\MessagesStorage;
 use Ocelot\Platinum\Interfaces\HighestUserBidsInterface;
-use Ocelot\Platinum\Service\HighestUserBid;
 
 class HighestUserBids implements HighestUserBidsInterface
 {
@@ -14,7 +14,7 @@ class HighestUserBids implements HighestUserBidsInterface
      */
     public static function highestUserBids(?array $bidders): array
     {
-        if (count($bidders) == 0) {
+        if (count((array) $bidders) == 0) {
             throw new \Exception(MessagesStorage::EXCEPTION_NO_BIDS);
         }
 
@@ -31,9 +31,6 @@ class HighestUserBids implements HighestUserBidsInterface
 
     private static function compare($a, $b): int
     {
-        if ($a == $b) {
-            return 0;
-        }
-        return ($a < $b) ? -1 : 1;
+        return $a <=> $b;
     }
 }
