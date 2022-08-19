@@ -1,8 +1,11 @@
 <?php
 
+use Ocelot\Platinum\Data\MessagesStorage;
 use Ocelot\Platinum\Data\ReservedPrice;
 use Ocelot\Platinum\Repository\BidderRepository;
-use Ocelot\Platinum\Service\BiddingService;
+use Ocelot\Platinum\Service\HighestUserBids;
+use Ocelot\Platinum\Service\Message;
+use Ocelot\Platinum\Service\WinnerService;
 
 require_once 'vendor/autoload.php';
 
@@ -11,8 +14,8 @@ $bidderRepository = new BidderRepository();
 $bidders = $bidderRepository->allAuctionParticipants();
 
 try {
-    $highestUserBids = BiddingService::highestUserBids($bidders);
-    $winnerName = BiddingService::defineWinner($highestUserBids);
+    $highestUserBids = HighestUserBids::highestUserBids($bidders);
+    $winnerName = WinnerService::winnerName($highestUserBids);
 //    var_dump($highestUserBids);
     if (null === $winnerName) {
         throw new \Exception("<h1>Winner is not defined</h1>");
@@ -31,21 +34,21 @@ try {
 
         if ($reservedPrice > $secondBetterPrice) {
             $winnerPrice = $reservedPrice;
-            echo "<h1>The winner become " . $winnerName . " with RESERVE price " . $reservedPrice . " euro </h1>";
+            echo sprintf(MessagesStorage::WINNER_WITH_RESERVE_PRICE, $winnerName, $winnerPrice);
 
             return true;
         } else {
-            $winnerPrice = BiddingService::winnerPrice($highestLoosingBids , $winnerName);
+            $winnerPrice = WinnerService::winnerPrice($highestLoosingBids , $winnerName);
         }
     }
 
-    if ($winnerPrice - $reservedPrice > 0) {
+    if ($winnerPrice - $reservedPrice >= 0) {
         if ($winnerName && $winnerPrice) {
-            echo "<h1>The winner become " . $winnerName . " with winner price " . $winnerPrice . " euro </h1>";
+            echo sprintf(MessagesStorage::WINNER_WITH_WINNER_PRICE, $winnerName, $winnerPrice);
             return true;
         }
     } else {
-        echo "<h1>The winner proposed the price less than the reserve price </h1>";
+        print(MessagesStorage::BID_LESS_THAN_RESERVE_PRICE);
         return null;
     }
 } catch (Exception $e) {

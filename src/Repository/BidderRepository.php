@@ -8,11 +8,12 @@ class BidderRepository
 {
     public function allAuctionParticipants(): ?array
     {
-        $bidderA = new Bidder('Bidder-A', [99 ]);
+        $bidderA = new Bidder('Bidder-A', [100, 130]);
         $bidderB = new Bidder('Bidder-B', null);
-        $bidderC = new Bidder('Bidder-C', [99]);
-        $bidderD = new Bidder('Bidder-D', [99, 99]);
-        $bidderE = new Bidder('Bidder-E', [99]);
+        $bidderC = new Bidder('Bidder-C', [80]);
+        $bidderD = new Bidder('Bidder-D', [105, 115, 125]);
+        $bidderE = new Bidder('Bidder-E', [132, 135, 140]);
+        $bidderF = new Bidder('Bidder-F', [99]);
 
 //        $bidderA = new Bidder('bidderA', null);
 //        $bidderB = new Bidder('bidderB', null);
@@ -26,6 +27,7 @@ class BidderRepository
             $bidderC,
             $bidderD,
             $bidderE,
+            $bidderF,
         ];
     }
 
