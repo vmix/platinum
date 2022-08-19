@@ -40,17 +40,46 @@ class WinnerService implements WinnerInterface
         return null;
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function winnerPrice(array $allBidders, string $winnerName): ?int
     {
-        switch (count($allBidders)) {
-            case 0:
-                return null;
-            case 1:
-                $key = array_key_first($allBidders);
-                return($allBidders[$key]);
-            default:
-                unset($allBidders[$winnerName]);
-                return max($allBidders);
+        $highestUserBids = HighestUserBids::highestUserBids($allBidders);
+//        var_dump($highestUserBids);die;
+        $reservedPrice = ReservedPrice::getReservedPrice();
+
+        if (count($highestUserBids) == 1) {
+//            $key = array_key_first($highestUserBids);
+//            $winnerPrice = $highestUserBids[$key];
+            return $reservedPrice;
+        } else {
+            unset($highestUserBids[$winnerName]);
+
+            $key = array_key_last($highestUserBids);
+            $secondBetterPrice = $highestUserBids[$key];
+            $highestLoosingBids = $highestUserBids;
+
+            if ($reservedPrice > $secondBetterPrice) {
+                $winnerPrice = $reservedPrice;
+//                echo sprintf(MessagesStorage::WINNER_WITH_RESERVE_PRICE, $winnerName, $winnerPrice);
+
+                return $winnerPrice;
+            } else {
+//                $winnerPrice = WinnerService::winnerPrice($highestLoosingBids , $winnerName);
+                switch (count($highestLoosingBids)) {
+                    case 0:
+                        return null;
+                    case 1:
+                        $key = array_key_first($highestLoosingBids);
+                        return $highestLoosingBids[$key];
+                    default:
+                        unset($highestLoosingBids[$winnerName]);
+                        return max($highestLoosingBids);
+                }
+            }
         }
+
+
     }
 }
