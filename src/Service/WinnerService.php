@@ -6,7 +6,6 @@ namespace Ocelot\Platinum\Service;
 use Ocelot\Platinum\Data\MessagesStorage;
 use Ocelot\Platinum\Data\ReservedPrice;
 use Ocelot\Platinum\Interfaces\WinnerInterface;
-use Ocelot\Platinum\Model\Bidder;
 
 class WinnerService implements WinnerInterface
 {
@@ -46,27 +45,21 @@ class WinnerService implements WinnerInterface
     public static function winnerPrice(array $allBidders, string $winnerName): ?int
     {
         $highestUserBids = HighestUserBids::highestUserBids($allBidders);
-//        var_dump($highestUserBids);die;
         $reservedPrice = ReservedPrice::getReservedPrice();
 
         if (count($highestUserBids) == 1) {
-//            $key = array_key_first($highestUserBids);
-//            $winnerPrice = $highestUserBids[$key];
             return $reservedPrice;
         } else {
             unset($highestUserBids[$winnerName]);
 
             $key = array_key_last($highestUserBids);
             $secondBetterPrice = $highestUserBids[$key];
+
             $highestLoosingBids = $highestUserBids;
 
             if ($reservedPrice > $secondBetterPrice) {
-                $winnerPrice = $reservedPrice;
-//                echo sprintf(MessagesStorage::WINNER_WITH_RESERVE_PRICE, $winnerName, $winnerPrice);
-
-                return $winnerPrice;
+                return $reservedPrice;
             } else {
-//                $winnerPrice = WinnerService::winnerPrice($highestLoosingBids , $winnerName);
                 switch (count($highestLoosingBids)) {
                     case 0:
                         return null;
@@ -79,7 +72,5 @@ class WinnerService implements WinnerInterface
                 }
             }
         }
-
-
     }
 }

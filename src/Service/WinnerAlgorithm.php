@@ -3,9 +3,10 @@
 namespace Ocelot\Platinum\Service;
 
 use Ocelot\Platinum\Data\MessagesStorage;
+use Ocelot\Platinum\Interfaces\WinnerAlgorithmInterface;
 use Ocelot\Platinum\Repository\BidderRepository;
 
-class WinnerAlgorithm
+class WinnerAlgorithm implements WinnerAlgorithmInterface
 {
     public function findWinner(BidderRepository $bidderRepository, int $reservedPrice): ?bool
     {
