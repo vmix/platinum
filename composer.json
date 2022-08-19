@@ -1,0 +1,23 @@
+{
+    "name": "ocelot/platinum",
+    "description": "A test task about auction's algorithm",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ocelot\\Platinum\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Viacheslav",
+            "email": "vm.php.dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require-dev": {
+        "rector/rector": "^0.14.0"
+    },
+    "require": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
