@@ -17,3 +17,19 @@ Finding auction winner and of the winning price of bid
 
 6. After that, we have the winner (s.4) and the winning price (s.5)
 
+Install and settings
+======================================================
+1. Run php-fpm and nginx server in the containers (Images that used for containers are optimized for apple m1 chip.
+You can change them from Docker Hub to accommodate your hardware).
+
+*docker-compose up -d*
+
+2. Install packages and their dependencies:
+
+*composer install*
+
+3. For running tests:
+
+*vendor/bin/phpunit tests/*
+
+4. For refactoring code the package *rector/rector* was used
