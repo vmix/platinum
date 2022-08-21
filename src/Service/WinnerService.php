@@ -20,7 +20,7 @@ class WinnerService implements WinnerInterface
                     $winnerBid = $highestUserBids[$key];
 
                     if ($winnerBid >= ReservedPrice::getReservedPrice()) {
-                        return array_key_last($highestUserBids);
+                        return $key;
                     } else {
                         return null;
                     }

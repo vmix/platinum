@@ -10,8 +10,6 @@ class WinnerAlgorithm implements WinnerAlgorithmInterface
 {
     public function findWinner(array $bidders, int $reservedPrice): ?array
     {
-//        $bidders = $bidderRepository->allAuctionParticipants();
-
         try {
             $highestUserBids = HighestUserBids::highestUserBids($bidders);
             $winnerName = WinnerService::winnerName($highestUserBids);
@@ -20,15 +18,15 @@ class WinnerAlgorithm implements WinnerAlgorithmInterface
                 throw new \Exception(MessagesStorage::EXCEPTION_NONE_WINNERS);
             }
 
-            $winnerPrice = WinnerService::winnerPrice($bidders , $winnerName);
+            $winningPrice = WinnerService::winnerPrice($bidders , $winnerName);
 
-            if ($winnerName && $winnerPrice) {
-                if ($winnerPrice - $reservedPrice > 0) {
-                    echo sprintf(MessagesStorage::WINNER_WITH_WINNER_PRICE, $winnerName, $winnerPrice);
+            if ($winnerName && $winningPrice) {
+                if ($winningPrice - $reservedPrice > 0) {
+                    echo sprintf(MessagesStorage::WINNER_WITH_WINNING_PRICE, $winnerName, $winningPrice);
                 } else {
                     echo sprintf(MessagesStorage::WINNER_WITH_RESERVE_PRICE, $winnerName, $reservedPrice);
                 }
-                return [$winnerName, $winnerPrice];
+                return [$winnerName, $winningPrice];
             }
         } catch (\Exception $e) {
             echo $e->getMessage();
